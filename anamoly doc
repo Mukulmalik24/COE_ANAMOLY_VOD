@@ -1,0 +1,615 @@
+
+ 
+Index
+1.	Section :1
+a.	Introduction
+b.	What is anomaly detection?
+c.	What is fraud detection?
+d.	How Anomalies are different from Fraud
+e.	Types of Fraud and Anomalies
+2.	Section:2 
+a.	Approaches currently used
+b.	Supervised learning methods
+c.	Unsupervised learning methods
+3.	Section:3
+a.	Telecom Industry approaches
+b.	Other Industry Approaches
+4.	Section :4
+a.	Current use cases/projects
+i.	Fraud Projects
+1.	Never Pay Greece
+2.	VRS Fraud Detection
+3.	Fraud Rule Engine
+4.	Consumer default prediction
+5.	Commissions/Agent based Fraud
+6.	Travel and Expense Fraud
+7.	OPEX Analytics
+b.	Anomaly Detection Projects
+1.	BSR 3.0
+2.	Z scale based outlier detection
+c.	Potential Fraud Use-Cases
+5.	Section:5
+a.	Flow diagram
+6.	References
+
+
+
+Section 1:
+Introduction
+This document has been prepared by the Fraud and Anomalies CoE team. This can be used as a reference document for all kinds of Fraud and Anomaly related use cases and projects.
+What is anomaly detection?
+Anomaly detection is a broad term referring to set of tools and techniques to identify any set of unusual data distribution. Any behaviour that be digitized or measured numerically, including machine performance, is subject to anomaly detection including network security breaches, extraordinary transactions or even mechanical breakdowns. 
+What is Fraud detection?
+Fraud detection is a subset of anomaly detection where an anomaly is introduced knowingly against acceptable behaviour (fair usage policy). 
+Anomalies (and hence Frauds) are generally very rare occurrence. Hence, detection problems faces challenge of low event rate (typically less than 1%). The low event rates also dictates the process and methods of detecting events. Following section in this primer will discuss in detail the methods of anomaly detection. 
+Another major challenge of anomaly detection is the unknown pattern of occurrence. A majority of the detection problems are unsupervised classification problems. It is often difficult to identify the cause of anomaly easily. Frauds, in particular, are designed to be very difficult to detect for as long as possible. Once detected the fraud occurrences diminishes and other patterns emerge. 
+Fraud detection, in contrast to general anomaly detection, relies more on business knowledge combined with data science. Business knowledge is helpful in designing the powerful features/ signals for fraud detection model.
+
+Anomaly classification
+ 
+Examples
+Type	Example
+Customer led frauds	IRSF, Credit default, Never Pay, Wangiri Fraud
+Vendor Fraud	False invoices, Fake PO
+Employee led fraud	Travel and Expense Fraud
+Agent led fraud	Commissions Fraud
+Anomalies	Improper data calculations, missing values
+
+
+
+
+
+
+
+Section 2:
+
+Fraud and Anomaly detection approaches
+
+Supervised Techniques
+Supervised methods require a labelled training set with normal and anomalous samples for constructing a predictive model. The most common supervised methods include supervised neural networks, support vector machine, k-nearest neighbours, Bayesian networks and decision trees.
+
+In the absence of labelled training set, we set out with unsupervised learning methods.
+Unsupervised Techniques
+Unsupervised techniques do not require manually labelled training data. They presume that most of the network connections are normal traffic and only a small amount of percentage is abnormal and anticipate that malicious traffic is statistically different from normal traffic. Based on these two assumptions, groups of frequent similar instances are assumed to be normal and the data groups that are infrequent are categorized as malicious.
+The most popular unsupervised algorithms include K-means, Autoencoders, GMMs, PCAs, and hypothesis tests-based analysis. [Know more..]
+Unsupervised anomaly detection algorithms make two assumptions about the data which motivate the general approach. The first assumption is that the number of normal instances vastly outnumbers the number of anomalies. The second assumption is that the anomalies themselves are qualitatively different from the normal instances. The basic idea is that since the anomalies are both different from normal and are rare, they will appear as outliers in the data which can be detected. Source: [Know more…]
+
+Time series based anomaly detection – 
+1)	A simple approach could be identifying irregularities in data that deviate from common statistical properties of a distribution, including mean, median, mode, and quantiles. Let's say the definition of an anomalous data point is one that deviates by a certain standard deviation from the mean. 
+
+ 
+2)	More sophisticated models involve decomposition of the time-series in trend, seasonality and remainder and applying the low pass filter on the remainder, instead of the original time-series
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+Number of variables
+1)	Univariate – Univariate anomalies/outliers can be found out using Box-plots. Outliers are the points which lie beyond the whiskers.
+ 
+
+
+2)	Bivariate – Bi-variate anomaly detection can be done visually or using some unsupervised methods such as various clustering techniques.
+ 
+3)	Multi-variate - Anomaly detection
+In most practical use cases, one may come across multivariate anomaly detection projects only and that’s where more sophisticated techniques come in handy.
+a)	Visual approach: One of the ways of starting to visualize the dataset could be by reducing the dimensionality using various feature reduction methods such as PCA, kernel PCA, SVD, Autoencoders and visualizing the data points on a 2d or 3d plot may help.
+b)	Statistical approach: There are multi-variate statistical methods which can help in finding anomalies in multiple variables at a time. One such technique is called Mahalanobis distance. It is a more effective distance measure because it can measure the distance between one point and a distribution. You can read more about it here. It has implementation in R. It has its assumptions that the data follows a normal distribution, so check before you use it.
+c)	Machine Learning approach:  
+a.	K NN – KNN approach can be used both as a supervised technique and as an unsupervised technique for finding anomalies.
+i.	As supervised technique is detects new points as outliers based on their proximity with already labelled anomalies
+ii.	In an unsupervised context it finds the knn distance which is an average distance of a point with its k-neighbours. An anomaly would supposedly have higher knn distance value than normal points. A cut-off can then be decided as a threshold to classify anomalies from normal cases. Check this paper for more details. There are certain implementations of Deep KNNs for finding anomalies in high dimensional data with categorical and binary variables as well. [Know more..]
+b.	Isolation Forest - building several decision trees and averaging the length of the trees is used to identify outlying samples. It has its implementation in Python ensemble.IsolationForest. Go ahead and check out this page.
+c.	One class SVM - One-class SVM is an unsupervised algorithm that learns a decision function for novelty detection: classifying new data as similar or different to the training set. It is trained only on the “normal” data and learns the decision boundary basis the normal data. It is then used to predict on new data to classify it as outlier or not. You can find a toy example here.
+d.	Local outlier factor – It is an implementation of k-nn distance based measure to find the local density of each point with respect to its k- neighbouring points and using this relative distance it is determined if that point is an outlier or not. It has its implementation in Python in neighbors.LocalOutlierFactor.
+e.	Elliptical Envelope – It is a level up and more robust implementation of Mahalanobis distance as a measure to estimate the outlyingness of a data point. It assumes that the data follows a Gaussian distribution. It estimates the Mahalanobis distance for inlying/normal data points using the mean, covariance of various sub-samples selected from the original data. Check out this paper for detailed understanding of the method.[know more...]
+f.	Also, find an implementation and comparison of Elliptical Eclipse, One class SVM, Isolation Forest and Local Outlier Factor all in one script here.
+
+d)	Deep Learning approach: Auto encoders are basically neural networks which are meant to learn from its input and replicate the input as its output. The architecture of an autoencoder is such that it compresses the input dimensions to lower dimensions and reconstructs the inputs. During the dimensionality reduction, the network learns the interactions between the various variables and should be able to re-construct them back to the original variables at the output. The idea of reduction of dimensions is similar to PCA except that it also captures non-linear interactions between variables.  This has no assumptions. There are Tensorflow and Keras libraries available to implement this. In the link below there is an implementation of time-series anomaly detection using convolutional autoencoders in keras.[know more..]
+
+Useful tutorials:
+
+•	A supervised fraud detection tutorial on the credit card fraud detection dataset on Kaggle using Light GBM. Link
+•	Application of LSTM based auto-encoder to detect anomalies in time-series data. Link
+•	
+
+
+
+
+
+
+
+
+
+
+
+
+Important view:
+
+Anybody looking forward to doing unsupervised anomaly detection cannot miss out the Numenta Anomaly Benchmark (NAB). It is a rich repository of real and artificial data and scripts. It is a benchmark for evaluating anomaly detection algorithms. Here is the scorecard of the top anomaly detection algorithms on NAB (last updated in 02/07/2020). Check out their GitHub page to know more https://github.com/numenta/NAB. Check out the documentation of each technique (link embedded), many of them are not very transparent and only open their APIs but you can get a general understanding of their methods.
+
+
+Detector	Standard Profile	Reward Low FP	Reward Low FN
+Perfect	100.0	100.0	100.0
+Numenta HTM*
+70.5-69.7	62.6-61.7	75.2-74.2
+CAD OSE†
+69.9	67.0	73.2
+earthgecko Skyline
+58.2	46.2	63.9
+KNN CAD†
+58.0	43.4	64.8
+Relative Entropy
+54.6	47.6	58.8
+Random Cut Forest ****
+51.7	38.4	59.7
+Twitter ADVec v1.0.0
+47.1	33.6	53.5
+Windowed Gaussian
+39.6	20.9	47.4
+Etsy Skyline
+35.7	27.1	44.5
+Bayesian Changepoint**	17.7	3.2	32.2
+EXPoSE
+16.4	3.2	26.9
+Random***	11.0	1.2	19.5
+Null	0.0	0.0	0.0
+
+The best way to utilize NAB is to use the datasets. Their rich collection of datasets can be used to train your model specific to your problem.  For e.g. if you are doing a time series anomaly detection and you do not have labelled data and if you are looking for detecting a certain type of anomalies, you can check out the repository artificialWithAnomaly which has different types of anomalous time-series with labelled anomalies and train your model on the one which is more suitable to you.
+•	art_daily_flatmiddle.csv
+•	art_daily_jumpsdown.csv
+•	art_daily_jumpsup.csv
+•	art_daily_nojump.csv
+•	art_increase_spike_density.csv
+•	art_load_balancer_spikes.csv
+
+There are other real data repositories as well. You can explore them based on the type of data you are working on. 
+
+•	artificialNoAnomaly
+•	artificialWithAnomaly
+•	realAWSCloudwatch
+•	realAdExchange
+•	realKnownCause
+•	realTraffic
+•	realTweets
+
+
+Benford’s Law:
+	
+Normal distribution is a golden law for data scientists when analysing the data. Benford’s law is much less talked about but is extremely useful for a data scientist involved in a Fraud project. The phenomenon explained by this law may sound spurious or ridiculous but it has been very thoroughly researched and published. [know more….]
+
+Benford’s Law, also known as the Law of First Digits or the Phenomenon of Significant Digits, is the finding that the first digits (or numerals to be exact) of the numbers found in series of records of the most varied sources do not display a uniform distribution, but rather are arranged in such a way that the digit “1” is the most frequent, followed by “2”, “3”, and so in a successively decreasing manner down to “9”.
+It is illustrated in the figure below.
+ 
+Source: https://www.kdnuggets.com/2019/08/benfords-law-data-science.html
+
+It has its applications in detecting clerical errors and fraud in accounting here , in financial statements assessment here and in detecting fraudulent data science studies and models here
+
+You can find this and this article useful to get a comprehensive understanding of the application of Benford’s law in fraud detection.
+
+It has its R implementation in the package ‘benford.analysis’.
+
+
+ 
+
+
+
+
+
+
+
+Section 4:  Current use cases/projects (WIP)
+
+a)	Detailed Description of Ongoing Projects/Use Cases  
+I.	Fraud Projects
+i.	Never Pay 
+•	Project Title : Never Pay (Customer Default Prediction)	
+•	Detection: Fraud Based 
+•	Fraud Category: Customer Default Fraud
+•	Problem Statement: Business has exposure to significant credit risk from customer who never pay up. This has direct impact on financials due to losses.
+•	OPCO segment: Greece
+•	Objective: To predict the risky customers based on machine classification learning model	
+•	KPI: Revenue	
+•	Solution Highlight:
+•	Solution Methodology:  Solution steps are mentioned below
+o	Identify customer who are not going to pay bills at POS
+Limit their device subsidy and sell high margin low risk products to them
+o	Monitor using Adjust usage limits, High usage monitoring, Roaming disablement
+o	Fortify model with additional data after 30/45 days, Increase the prediction accuracy. Pre-emptive disconnection to limit credit exposure and early bill generation
+o	Evaluate Periodic model tweaks and new factors to be considered
+•	Data Used: Following data was used to build the models
+o	Customer geography : City, county, postal code
+o	Customer demography : Age, profession, nationality
+o	Customer usage : Tariff plan, Contract duration, other usage variables
+o	Contact info : Email address domain name (not the full address)
+o	Dealer info : dealer code , dealer postal code	
+•	Technique Used : Supervised and Unsupervised ML models
+(Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used:
+•	Algorithm Used (solution code if any): Decision Tree, random Forest, ADA Boost, SVM, Neural Network, Logistic Regression
+•	Project Outcome: 
+o	Over 80% accuracy in predicting customer who will default in test set
+o	Business can deny service, reduce risk by offering high margin product or keep the usage limits low for high risk customers
+•	Business Benefits:
+•	Challenges:
+•	Current stage of Project: 
+(proposed, in development, in production)
+ii.	VRS Fraud Detection
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+               (Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+(Proposed, in development, in production)
+1.	Fraud Rule Engine
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+               (Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+(Proposed, in development, in production)
+
+
+
+iii.	Consumer default prediction
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+               (Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+               (Proposed, in development, in production)
+iv.	Commissions/Agent based Fraud
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+               (Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+              (Proposed, in development, in production)
+v.	Travel and Expense Fraud
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+               (Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+(Proposed, in development, in production)
+1.	OPEX Analytics
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+               (Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+(Proposed, in development, in production)
+vi.	Anomaly Detection Projects
+1.	BSR 2.0
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+               (Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+               (Proposed, in development, in production)
+vii.	BSR 3.0
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+(Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+(Proposed, in development, in production)
+1.	Z scale based outlier detection
+•	Project Title	
+•	Fraud based or Anomalies based
+•	Problem Statement	
+•	OPCO segment	
+•	Objective	
+•	Fraud /Anomalies	 
+•	KPI	
+•	Solution Highlight
+•	Solution Methodology	
+•	Technique Used 
+(Supervised Learning / Unsupervised Learning /Rule based)
+•	Tools Used
+•	Algorithm Used
+•	Project Outcome
+•	Business Benefits
+•	Challenges
+•	Current stage of Project 
+(Proposed, in development, in production)
+b.	Potential Fraud Use-Cases
+This section will comprise of popular fraud use cases across Telecom industry that can be explored for analysis 
+
+
+
+References:
+https://towardsdatascience.com/how-to-use-machine-learning-for-anomaly-detection-and-condition-monitoring-6742f82900d7
+https://www.machinelearningplus.com/statistics/mahalanobis-distance/
+https://pdfs.semanticscholar.org/2636/240c18d7a4f3a321d1b6f68e8cadd1409a76.pdf - KNN for anomaly detection (paper)
+https://www.kdnuggets.com/2019/10/anomaly-detection-explained.html
+https://arxiv.org/pdf/2002.10445.pdf
+https://scikit-learn.org/stable/auto_examples/svm/plot_oneclass.html#sphx-glr-auto-examples-svm-plot-oneclass-py
+https://scikit-learn.org/stable/auto_examples/plot_anomaly_comparison.html#sphx-glr-auto-examples-plot-anomaly-comparison-py
+https://scikit-learn.org/stable/modules/outlier_detection.html
+https://keras.io/examples/timeseries/timeseries_anomaly_detection/
+
+
+
+
+
+********************************************************************************************
+Forecasting
+*********************************************************************************************
+
+ 
+Contents
+
+1. Effectively using ARIMA	3
+1.1 Purpose of Automating ARIMA process -	3
+1.2 Automated ARIMA process	4
+1.3 Solutions	5
+2. Time Series Forecasting using Fourier Transformation	12
+2.1 Important points about fourier transform in forecasting	14
+2.2 Modelling using Fourier Transform	14
+2.3 TBATS model for Time Series Forecasting	15
+
+
+ 
+Revision history
+Date	Version	Description	Created By	Reviewed by
+06-04-2020	1.0	Initial Draft	CoE Team	
+26-04-2020	2.0	Final Draft	CoE Team	
+
+ 
+1. Effectively using ARIMA
+The choice of correct (p,d,q) is based upon getting the right model fit with - 
+•	The necessary stationarity tests on the input time-series data
+•	Getting the ACF/PACF results to have uncorrelated residuals 
+•	Finally, having the least AICc and BICC values to choose the best model out of the set of models available as per different (p,d,q) values
+1.1 Purpose of Automating ARIMA process -
+•	There are cases where there is a requirement to make the modelling process quite automated -
+o	The requirement is to work on many time-series data at one go
+	While working for VRS forecasting exercise, the team had to forecast the traffic of Source location-Destination location combinations. Since the team was dealing with the entire Vodafone data (select ones for the PoC while all for actual implementation) it was required that the approach should be covering all the combinations at one go. Optimizing one combination of (p,d,q) doesn’t make it working for all series.
+	Manually looking at every type of time-series existing and ARIMA models was difficult to go for - it was time consuming and doesn’t make It a solution. Also, it was not a scalable from PoC to actual Project implementation
+o	There are various other techniques which are in place - the best technique with highest accuracy would be chosen to forecast or there would be an ensemble of techniques to provide the best output - ARIMA should not be the slowest and thus should not become the defining step for the speed of the process
+o	There are intuitive solutions available while working for a few sets of (p,d,q) values - but the time-series in hand could be the different one from the existing ones and therefore requires finding the better one through thorough investigation on which (p,d,q) works the best
+ 
+1.2 Automated ARIMA process
+What are the process options available for the automated approach -
+•	Creating an automated function which chooses the possible non-negative values of (p,d,q) -
+o	This could be done either through grid-search - refer this
+o	Creating your own function and defining the combinations of possible (p,d,q) - you may define the upper limits of the three values to limit the searching of best model - to be faster and thus save on computing time
+•	Using Auto.ARIMA function to best fit the model - this would be way faster than the first approach of building your own function
+What is the difference In the process between Auto ARIMA function and ARIMA functions - source
+ 
+
+1.3 Solutions
+1.3.1 Grid - Search approach - Source
+
+1.3.2 Own function -
+Here is an example of own function - 
+
+
+
+
+ 
+
+ 
+ 
+ 
+
+1.3.3 Auto ARIMA R function -
+Auto.ARIMA is a special function of forecast() package (in R) which leads to have the best fitted ARIMA model by searching with the set of values of (p,d,q). Though the function provides you the best output model performance in terms of AICc/BICC, there are certain tweaking that might be required to make it even better -
+
+
+
+
+1.3.3.1 Box Cox Transformation -
+•	Box Cox transformation is the way to convert a non-normal distribution into a normal one
+•	This helps in dealing with outliers - Box Cox transformation is the way for time-series data
+•	The transformation provide the best way to transform the data using parameter λ (lambda)
+•	More about Box Cox Transformation - here
+•	One can get required 'Lambda' using - 
+
+
+
+
+
+
+1.3.3.2 Approximation -
+Auto ARIMA model tries to fit the model by finding best fit using AICc score. The Lowest AICc score defines the values of (p,d,q) with best model results.
+In order to find out the solution faster, the algorithm doesn’t fit all the combinations - making a sub-optimal solution as a final result. The solution is to not to approximated the optimization process of auto ARIMA function by using -
+
+	
+
+1.3.3.3 Mean and Drift -
+Once the ARIMA models are having the best models with differencing being more than 0, we are working with the differenced dataset where the constant of original time series dataset would have differenced to be zero.
+By default, R tries to make certain parameters Mean and Drift to be Zero. 
+Drift being allowed makes models with changing means to be fitted.
+Mean being allowed makes models to have non-zero constant while getting best fitted.
+
+	
+
+1.3.3.4 Seasonal Components in Auto ARIMA -
+Apart from regular (p,d,q), Auto ARIMA allows seasonal components to be dealt as well. The parameters of seasonal components are (P,D,Q)
+The default condition for Auto ARIMA is to have seasonal component also being searched while getting the best fit model. If through seasonal tests if there is no seasonality component, the seasonal search can be stopped -
+
+While when we know that there is a seasonal component - through STL decomposition, we can specify thjs in Auto ARIMA function for better search of the fitted model
+
+1.3.3.5 External Regressor -
+Auto ARIMA has the adaptation where the external regressors as influencing factors can be included during model fitting. 
+A numerical vector or matrix (not data frame) with equal length as the time series length can be specified as another input variable. While forecasting the model the same regressors should be available for the forecasting period - sometime it is required to forecast regressors as well for the time series forecasting.
+xreg in auto ARIMA can have multiple input regressors -
+
+
+1.3.3.6 Some conditions for Auto ARIMA -
+
+Maximum value of p	5
+Maximum value of q	5
+Maximum value of P (seasonal)	2
+Maximum value of Q (seasonal)	2
+Maximum value of d	2
+Maximum value of D (seasonal)	1
+Stationary series - tests to make it stationary	FALSE
+ic - tests to find best fit models	aicc, aic, bic
+Tests for stationarity	kpss, adf
+
+ 
+2. Time Series Forecasting using Fourier Transformation
+In case of any series which is repetitive, seasonal in nature, mathematically the values of the series can be decomposed in Sine and Cosine with appropriate frequency terms associate with the series.
+Fourier transform often is called the conversion of a Time-Series into a frequency domain and vice versa (inverse Fourier transform) as well.  The associated Sine and Cosine come with their respective weights. The Time-series is the sum product of Sine/Cosine terms with the respective weights.
+ 
+Here, n are different frequencies associated with the original time series while xn is the weight associated with frequency n.
+•	If the time series has only one frequency - there would be only one dominant term in the Fourier transform of the series. 
+•	The process to convert into frequency domain makes it easier to understand whether a series has a single frequency or multiple frequencies
+•	If there are way too many frequencies with quite equal weights for most of the frequency terms - the series, mostly, would be aperiodic
+In the example below - the time series has a combination of three different Sine functions of three different frequencies - as understandable through the picture. Corresponding Fourier transform has three distinct frequency terms - stating three seasonality associated
+ 
+If there many frequencies in the time series - (with some dominant components as marked)
+ 
+
+A few more examples -
+
+ 
+ 
+2.1 Important points about fourier transform in forecasting
+With Fourier terms, we often need fewer predictors than with dummy variables, especially when number of frequency terms associated with time series is large. In case of weekly seasonality/daily seasonality Fourier transform is quite useful.
+2.2 Modelling using Fourier Transform
+•	Fourier function in R has two arguments - The first argument to fourier() allows it to identify the seasonal period  m and the length of the predictors to return. The second argument K specifies how many pairs of sin and cos terms to include. The maximum allowed is K = m/2 where m is the seasonal period.
+•	In case of long seasonality associated with the data, it is better to use Fourier transform along with ARIMA and auto ARIMA functions.
+•	The details of the approach and modelling can be found - here
+
+ 
+2.3 TBATS model for Time Series Forecasting
+TBATS stands for - 
+Trigonometric Seasonality 
+Box-Cox transformation
+ARMA errors
+Trends
+Seasonal Patterns
+TBATS tries to take the best of various methods and utilize all to make better model results. 
+•	The roots of TBATS lie in exponential smoothing methods. 
+•	The Box-Cox transformation makes sure that the outliers are transformed to maintain the normality of the datasets. 
+•	All associated frequency terms are taken into consideration through Fourier transformation
+•	TBATS model try different models in the background -
+o	Trend component is tried out to fit the model - even change in Trend values through damping
+o	 Seasonal and non-seasonal models are created
+o	ARMA process to best fit (p,q) values are tested
+•	The best model output comes with all underlying models tried out in model building stage
+•	For Mathematical fundamentals behind TBATS - please visit - here
+
+2.3.1 Implementation
+'tbats' function is part of 'forecast' package in R - The details of the function can be found out - here
+It is important to tweak different parameters to obtain the best results for the required datasets - otherwise let the package define the optimization which may lead to slowness in the output results.
+2.3.2 Important points on TBATS
+1.	TBATS deals the time series datasets with multiple seasonality associated with it - yearly, weekly, daily 
+2.	In cases of non-integer seasonality - something which the data is revealing and is important to be used In the way to have correct predictions - TBATS is the one to go for
+3.	Processing of TBATS model is slower than other time series models - better to create a logical structure as per the kind of data to hit TBATS only for specific cases – where other time series or regression models are giving pretty poor results. 
+4.	It is better to profile the time series dataset qualities - the characteristics for which ARIMA or ETS are giving similar results to TBATS - TBATS can be avoided. TBATS is slow it would improve accuracy significantly for the specific cases.
+5.	There Is another approach of BATS which uses seasonal patterns in more traditional way - not in the fourier transformation way - the output results of BATS are also slow due to trying out multiple models while optimizing current datasets-model parameters
+6.	TBATS cannot have external regressors like in case of ARIMA or auto ARIMA
+
+
+
+
